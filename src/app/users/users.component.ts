@@ -20,8 +20,8 @@ export class UsersComponent implements OnInit {
   getUsers(): void {
     this.usersService.getUsers().subscribe(
       (response:any) => {
-        this.users = response.users,
-        console.log(this.users)
+        this.users = response.users
+//,        console.log(this.users)
       }
     );
   }
