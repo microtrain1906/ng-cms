@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { Router } from "@angular/router";
+
+import { UsersService } from '../users.service';
+import { User } from '../user';
 
 @Component({
   selector: 'app-user-create',
@@ -7,9 +12,33 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserCreateComponent implements OnInit {
 
-  constructor() { }
+  user = new User();
+  errors: Array<any> = [];
+  errorMessage: string;
 
-  ngOnInit() {
+  constructor(
+    private usersService: UsersService,
+    private router: Router
+  ) { }
+
+  ngOnInit(): void{}
+
+  response(response): void{
+    if(response.success===false){
+      this.errors = response.error.errors;
+      this.errorMessage = response.error.message;
+    }
+
+    if(response.success===true){
+      this.router.navigate(['/users/view/', response.user._id]);
+    }
   }
 
+  onSubmit(): void {
+    this.usersService.createUser(this.user).subscribe(
+      (response) => {
+        this.response(response)
+      }
+    );
+  }
 }
